@@ -1,5 +1,5 @@
 '''
-#       Sesión 14: Proyecto Parcial 2
+#       Proyecto-Final-Prepa-EM2025
 #       Fernando Chávez Nolasco ─ A01284698
 #       Andrés Rodríguez Cantú ─ A01287002
 #       Roberto André Guevara Martínez ─ A01287324
@@ -9,8 +9,8 @@
 #
 #       Archivo: lib/color.py
 #
-#       Creado:                   13/03/2024
-#       Última Modificación:      19/03/2024
+#       Creado:                   03/05/2024
+#       Última Modificación:      04/05/2024
 '''
 class CustomColor:
     def __init__(self, hex_color):

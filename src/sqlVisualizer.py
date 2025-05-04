@@ -1,18 +1,47 @@
+'''
+#       Proyecto-Final-Prepa-EM2025
+#       Fernando Chávez Nolasco ─ A01284698
+#       Andrés Rodríguez Cantú ─ A01287002
+#       Roberto André Guevara Martínez ─ A01287324
+#       Víctor Manuel Sánchez Chávez ─ A01287522
+#       
+#       Copyright (C) Tecnológico de Monterrey
+#
+#       Archivo: sqlVisualizer.py
+#
+#       Creado:                   03/05/2024
+#       Última Modificación:      04/05/2024
+'''
 import sqlite3
 import os
 import sys
 import prettytable
+# Include all useful lib modules
 sys.path.append(os.path.join(os.path.dirname(__file__), "..")) 
-from lib import input_color, messages
+from lib import input_color, message
+
+class Functions:
+    def __init__(self):
+        pass
+
+    def exit(self):
+        message.console("Saliendo del programa...")
+        sys.exit(0)
+
+    def cls(self):
+        os.system('cls' if os.name == 'nt' else 'clear')
 
 class Main:
     def __init__(self):
         self.db_path = os.path.join(os.path.dirname(__file__), "db", "example.db")
         pass
 
-    def create(self):
+    def create(self, name="example"):
         try:
-            self.conn = sqlite3.connect("example.db")
+            db_dir = os.path.join(os.path.dirname(__file__), "db")
+            os.makedirs(db_dir, exist_ok=True)  # Ensure the directory exists
+            self.db_path = os.path.join(db_dir, f'{name}.db')  
+            self.conn = sqlite3.connect(self.db_path)
             self.cursor = self.conn.cursor()
             self.cursor.execute("""
                 CREATE TABLE IF NOT EXISTS data (
@@ -28,7 +57,7 @@ class Main:
                 print("Database is corrupted. Recreating the database...")
                 if hasattr(self, 'conn') and self.conn:
                     self.conn.close()
-                os.remove("example.db")
+                os.remove(self.db_path)
                 self.create()
             else:
                 print(f"Database error occurred: {e}")
@@ -84,9 +113,49 @@ class Main:
         finally:
             if hasattr(self, 'conn') and self.conn:
                 self.conn.close()
+
+    def delete(self, id):
+        try:
+            self.conn = sqlite3.connect(self.db_path)
+            self.cursor = self.conn.cursor()
+            self.cursor.execute("DELETE FROM data WHERE id = ?", (id,))
+            if self.cursor.rowcount == 0:
+                print(f"Error: No record found with id {id}.")
+            else:
+                self.conn.commit()
+                print(f"Record with id {id} deleted successfully.")
+        except sqlite3.Error as e:
+            print(f"Database error occurred: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+        finally:
+            if hasattr(self, 'conn') and self.conn:
+                self.conn.close()
+
+    def goto(self, id):
+        try:
+            self.conn = sqlite3.connect(self.db_path)
+            self.cursor = self.conn.cursor()
+            self.cursor.execute("SELECT * FROM data WHERE id = ?", (id,))
+            row = self.cursor.fetchone()
+            if row:
+                table = prettytable.PrettyTable()
+                table.field_names = ["ID", "Name", "Age"]
+                table.add_row(row)
+                print(table)  # Display the table in the terminal
+            else:
+                print(f"Error: No record found with id {id}.")
+        except sqlite3.Error as e:
+            print(f"Database error occurred: {e}")
+        except Exception as e:
+            print(f"An unexpected error occurred: {e}")
+        finally:
+            if hasattr(self, 'conn') and self.conn:
+                self.conn.close()
     
 if __name__ == "__main__":
     main = Main()
+    tfunctions = Functions()
 
     while True:
         try:
@@ -96,16 +165,16 @@ if __name__ == "__main__":
             parts = comando.split()
             comando_name = parts[0]
             args = parts[1:]
-            # Use getattr to call the method on the 'main' object
-            method = getattr(main, comando_name, None)
+            # Use getattr to call the method on either 'main' or 'tfunctions' object
+            method = getattr(main, comando_name, None) or getattr(tfunctions, comando_name, None)
             if method is None:
-                print(f"Error: Command '{comando_name}' not found.")
+                message.error(f"Error: Command '{comando_name}' not found.")
             else:
                 method(*args)
         except KeyboardInterrupt:
-            messages.console("Programa terminado por el usuario.")
+            message.console("Programa terminado por el usuario.")
             break
         except AttributeError as e:
-            print(f"Error: {e}")
+            message.error(f"Error: {e}")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            message.error(f"An unexpected error occurred: {e}")

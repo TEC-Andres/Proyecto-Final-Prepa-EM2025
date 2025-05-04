@@ -1,5 +1,5 @@
 '''
-#       Sesión 14: Proyecto Parcial 2
+#       Proyecto-Final-Prepa-EM2025
 #       Fernando Chávez Nolasco ─ A01284698
 #       Andrés Rodríguez Cantú ─ A01287002
 #       Roberto André Guevara Martínez ─ A01287324
@@ -7,10 +7,10 @@
 #       
 #       Copyright (C) Tecnológico de Monterrey
 #
-#       Archivo: lib/InputColor.py
+#       Archivo: lib/__iinputcolornit__.py
 #
-#       Creado:                   13/03/2024
-#       Última Modificación:      19/03/2024
+#       Creado:                   03/05/2024
+#       Última Modificación:      04/05/2024
 '''
 import sys
 import re
@@ -20,7 +20,7 @@ from lib.color import FG, Style
 class InputColor:
     SELECT_STYLE = "\033[7m"
 
-    def __init__(self, prompt="Escribe algo: "):
+    def __init__(self, prompt=">>> "):
         self.prompt = prompt
         self.user_input = ""
         self.cursor_position = 0
