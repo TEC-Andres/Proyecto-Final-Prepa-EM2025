@@ -1,2 +1,7 @@
 # Proyecto-Final-Prepa-EM2025
-Voy a reir, voy a bailar, la vida es una es un carnaval
+Creado por:
+    Proyecto-Final-Prepa-EM2025
+    Fernando Chávez Nolasco ─ A01284698       
+    Andrés Rodríguez Cantú ─ A01287002
+    Roberto André Guevara Martínez ─ A01287324
+    Víctor Manuel Sánchez Chávez ─ A01287522
