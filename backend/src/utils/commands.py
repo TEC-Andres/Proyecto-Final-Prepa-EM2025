@@ -2,6 +2,7 @@ import sqlite3
 import os
 import sys
 import prettytable
+
 # Include all lib modules
 sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..")) 
 from lib import message
