@@ -10,7 +10,7 @@
 #       Archivo: lib/__iinputcolornit__.py
 #
 #       Creado:                   03/05/2024
-#       Última Modificación:      04/05/2024
+#       Última Modificación:      05/05/2024
 '''
 import sys
 import re
@@ -152,6 +152,7 @@ class InputColor:
             color_map = {
                 "exit": FG.H00AAAA,
                 "cls": FG.H888888,
+                "help": FG.H00AAAA,
             }
             words = self.user_input.split()
             colored_input = self.user_input
@@ -163,11 +164,19 @@ class InputColor:
                 first_word_colored = f"{FG.HFFFF00}{words[0]}{Style.RESET_ALL}"
                 colored_input = first_word_colored + self.user_input[len(words[0]):]
 
-            # Apply color to words after '-'
+            # Apply color to words after '--'
             def replace_dash_words(match):
-                return f"{FG.H848484}-{match.group(1)}{Style.RESET_ALL}"
+                return f"{FG.H848484}--{match.group(1)}{Style.RESET_ALL}"
 
-            colored_input = re.sub(r"-\s*(\w+)", replace_dash_words, colored_input)
+            def replace_negative_numbers(match):
+                return f"{FG.HFF0000}{match.group(0)}{Style.RESET_ALL}"
+
+            def replace_positive_numbers(match):
+                return f"{FG.H34A853}{match.group(0)}{Style.RESET_ALL}"
+
+            colored_input = re.sub(r"--\s*(\w+)", replace_dash_words, colored_input)
+            colored_input = re.sub(r"-\d+", replace_negative_numbers, colored_input)
+            colored_input = re.sub(r"\+\d+", replace_positive_numbers, colored_input)
 
         # Build the full line with prompt.
         colored_line = self.prompt + colored_input

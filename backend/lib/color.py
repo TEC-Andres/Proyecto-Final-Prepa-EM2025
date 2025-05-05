@@ -37,6 +37,7 @@ class FG:
     H00AA00 = CustomColor("#00AA00").color_code # Green
     H00AAAA = CustomColor("#00AAAA").color_code # Lapis Lazuli Blue
     H0000FF = CustomColor("#0000FF").color_code # Blue
+    H34A853 = CustomColor("#34A853").color_code # Economics Green
     H443A3B = CustomColor("#443A3B").color_code # Dark Gray
     H555555 = CustomColor("#555555").color_code # Gray
     H55FF55 = CustomColor("#55FF55").color_code # Light Green
