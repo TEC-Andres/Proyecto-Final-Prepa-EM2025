@@ -107,7 +107,7 @@ Proyecto-Final-Prepa-EM2025/
 ```
 
 ## Licencia
-Este proyecto es propiedad del Tecnológico de Monterrey y fue desarrollado como parte del curso **Proyecto Final Prepa EM2025**.
+Este proyecto es propiedad del Tecnológico de Monterrey y fue desarrollado como parte del curso **Innovación Tecnológica**.
 
 ## Créditos
 Agradecimientos a los autores y colaboradores por su dedicación y esfuerzo en el desarrollo de este proyecto.
