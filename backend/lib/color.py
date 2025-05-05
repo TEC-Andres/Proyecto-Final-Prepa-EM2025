@@ -45,6 +45,7 @@ class FG:
     H848484 = CustomColor("#848484").color_code # CMD Gray
     H888888 = CustomColor("#888888").color_code # Dusk Gray
     HAAAAAA = CustomColor("#AAAAAA").color_code # Light Gray
+    HEA4335 = CustomColor("#EA4335").color_code # Economics Red
     HFF0000 = CustomColor("#FF0000").color_code # Red
     HFF5555 = CustomColor("#FF5555").color_code # Light Red
     HFFA500 = CustomColor("#FFA500").color_code # Orange

@@ -16,13 +16,12 @@ import sqlite3
 import os
 import sys
 import prettytable
-import shlex  # Add this import for parsing input
-import re
-# Include all useful lib modules
-sys.path.append(os.path.join(os.path.dirname(__file__), "..")) 
+import shlex 
+# Include all lib modules
+sys.path.append(os.path.join(os.path.dirname(__file__), "..", "..")) 
 from lib import input_color, message
 
-class Functions:
+class TerminalFunctions:
     def __init__(self):
         pass
 
@@ -35,12 +34,12 @@ class Functions:
 
 class Main:
     def __init__(self):
-        self.db_path = os.path.join(os.path.dirname(__file__), "db", "example.db")
+        self.db_path = os.path.join(os.path.dirname(__file__), "..", "db", "example.db")
         pass
 
     def create(self, name="example"):
         try:
-            db_dir = os.path.join(os.path.dirname(__file__), "db")
+            db_dir = os.path.join(os.path.dirname(__file__), "..", "db")
             os.makedirs(db_dir, exist_ok=True)  # Ensure the directory exists
             self.db_path = os.path.join(db_dir, f'{name}.db')  
             self.conn = sqlite3.connect(self.db_path)
@@ -125,11 +124,11 @@ class Main:
                 VALUES (?, ?, ?, ?)
             """, (product, description, price, quantity))
             self.conn.commit()
-            print("Record added successfully.")
+            message.success("Record added successfully.")
         except sqlite3.Error as e:
-            print(f"Database error occurred: {e}")
+            message.error(f"Database error occurred: {e}")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            message.error(f"An unexpected error occurred: {e}")
         finally:
             if hasattr(self, 'conn') and self.conn:
                 self.conn.close()
@@ -140,14 +139,14 @@ class Main:
             self.cursor = self.conn.cursor()
             self.cursor.execute("DELETE FROM data WHERE id = ?", (id,))
             if self.cursor.rowcount == 0:
-                print(f"Error: No record found with id {id}.")
+                message.error(f"Error: No record found with id {id}.")
             else:
                 self.conn.commit()
-                print(f"Record with id {id} deleted successfully.")
+                message.success(f"Record with id {id} deleted successfully.")
         except sqlite3.Error as e:
-            print(f"Database error occurred: {e}")
+            message.error(f"Database error occurred: {e}")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            message.error(f"An unexpected error occurred: {e}")
         finally:
             if hasattr(self, 'conn') and self.conn:
                 self.conn.close()
@@ -164,11 +163,11 @@ class Main:
                 table.add_row(row)
                 print(table)  # Display the table in the terminal
             else:
-                print(f"Error: No record found with id {id}.")
+                message.error(f"Error: No record found with id {id}.")
         except sqlite3.Error as e:
-            print(f"Database error occurred: {e}")
+            message.error(f"Database error occurred: {e}")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            message.error(f"An unexpected error occurred: {e}")
         finally:
             if hasattr(self, 'conn') and self.conn:
                 self.conn.close()
@@ -183,7 +182,9 @@ class Main:
             "goto [id]": "Muestra un registro específico por ID.",
             "cls": "Limpia la pantalla.",
             "exit": "Sale del programa.",
-            "help": "Muestra esta ayuda."
+            "help": "Muestra esta ayuda.",
+            "search [term]": "Busca registros que contengan el término especificado.",
+            "transaction [id/product] [amount]": "Realiza una transacción de stock.",
         }
         print("\n".join([f"  {cmd} - {desc}" for cmd, desc in commands.items()]))
 
@@ -207,27 +208,31 @@ class Main:
 
             print(table)  # Display the table in the terminal
         except sqlite3.Error as e:
-            print(f"Database error occurred: {e}")
+            message.error(f"Database error occurred: {e}")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            message.error(f"An unexpected error occurred: {e}")
         finally:
             if hasattr(self, 'conn') and self.conn:
                 self.conn.close()
 
-    def transaction(self, id, amount):
+    def transaction(self, identifier, amount):
         try:
             self.conn = sqlite3.connect(self.db_path)
             self.cursor = self.conn.cursor()
             
-            # Fetch the current quantity of the item
-            self.cursor.execute("SELECT quantity FROM data WHERE id = ?", (id,))
+            # Determine if the identifier is an ID (integer) or a Product (string)
+            if identifier.isdigit():
+                self.cursor.execute("SELECT id, product, quantity FROM data WHERE id = ?", (int(identifier),))
+            else:
+                self.cursor.execute("SELECT id, product, quantity FROM data WHERE product = ?", (identifier,))
+            
             row = self.cursor.fetchone()
             
             if not row:
-                print(f"Error: No record found with id {id}.")
+                message.error(f"No record found with identifier '{identifier}'.")
                 return
             
-            current_quantity = row[0]
+            id, product, current_quantity = row
             new_quantity = current_quantity + int(amount)  # Add or subtract the amount
             
             if new_quantity < 0:
@@ -242,13 +247,13 @@ class Main:
             """, (new_quantity, id))
             
             self.conn.commit()
-            print(f"Transaction successful. New quantity for id {id} is {new_quantity}.")
+            message.success(f"Transaction successful. New quantity for '{product}' is {new_quantity}.")
         except sqlite3.Error as e:
-            print(f"Database error occurred: {e}")
+            message.error(f"Database error occurred: {e}")
         except ValueError:
-            print("Error: Amount must be a valid integer.")
+            message.error("Error: Amount must be a valid integer.")
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            message.error(f"An unexpected error occurred: {e}")
         finally:
             if hasattr(self, 'conn') and self.conn:
                 self.conn.close()
@@ -256,7 +261,7 @@ class Main:
     
 if __name__ == "__main__":
     main = Main()
-    tfunctions = Functions()
+    tfunctions = TerminalFunctions()
     print("Bienvenido al programa de visualización de SQL. Escribe 'help' para ver los comandos disponibles.")
 
     while True:

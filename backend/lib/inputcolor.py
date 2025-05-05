@@ -169,7 +169,7 @@ class InputColor:
                 return f"{FG.H848484}--{match.group(1)}{Style.RESET_ALL}"
 
             def replace_negative_numbers(match):
-                return f"{FG.HFF0000}{match.group(0)}{Style.RESET_ALL}"
+                return f"{FG.HEA4335}{match.group(0)}{Style.RESET_ALL}"
 
             def replace_positive_numbers(match):
                 return f"{FG.H34A853}{match.group(0)}{Style.RESET_ALL}"
