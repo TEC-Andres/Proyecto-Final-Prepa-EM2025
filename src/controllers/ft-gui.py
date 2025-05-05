@@ -12,8 +12,6 @@
 #       Creado:                   04/05/2024
 #       Última Modificación:      05/05/2024
 '''
-
-# find_there_tkinter.py
 import os
 import sys
 
@@ -116,8 +114,6 @@ class AddPage(tk.Frame):
         self.err = tk.Label(self, text="", fg="red",
                             bg="#ffffff", font=("Arial", 9))
         self.err.pack(anchor="w", pady=(5, 0))
-
-        # Add and Update Buttons
         btn_frame = tk.Frame(self, bg="#ffffff")
         btn_frame.pack(fill=tk.X, pady=(10, 0))
 
