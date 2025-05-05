@@ -26,7 +26,7 @@ Este proyecto es una aplicación de gestión de inventarios y transacciones, dis
 ## Instalación
 1. Clona este repositorio:
    ```bash
-   git clone <URL_DEL_REPOSITORIO>
+   git clone https://github.com/TEC-Andres/Proyecto-Final-Prepa-EM2025
    cd Proyecto-Final-Prepa-EM2025
    ```
 2. Instala las dependencias:
