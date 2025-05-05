@@ -18,7 +18,7 @@ class MyRenderer:
         self.frame.pack(fill="both", expand=True)
 
         # Load and inline HTML and CSS
-        html_dir = os.path.join(os.path.dirname(__file__), "..", "webpage")
+        html_dir = os.path.join(os.path.dirname(__file__), "..", "..", "..", "frontend", "webpage")
         with open(os.path.join(html_dir, "index.html"), encoding="utf-8") as f:
             html = f.read()
         with open(os.path.join(html_dir, "styles.css"), encoding="utf-8") as f:
